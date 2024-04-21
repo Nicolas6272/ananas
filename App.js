@@ -4,7 +4,7 @@ import TestPage from "./src/testPage";
 
 export default function App() {
   return (
-    <View>
+    <View className="h-full flex items-center justify-center">
       <TestPage />
       <StatusBar style="auto" />
     </View>
