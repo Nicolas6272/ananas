@@ -1,12 +1,14 @@
 import { StatusBar } from "expo-status-bar";
 import { View } from "react-native";
-import TestPage from "./src/testPage";
+import TestPage from "./src/TestPage";
 
-export default function App() {
+const App = () => {
   return (
-    <View className="h-full flex items-center justify-center">
-      <TestPage />
+    <View>
       <StatusBar style="auto" />
+      <TestPage />
     </View>
   );
-}
+};
+
+export default App;

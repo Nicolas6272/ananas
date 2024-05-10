@@ -3,7 +3,7 @@ import { Text, View } from "react-native";
 
 const TestPage: FC = () => {
   return (
-    <View className="flex items-center justify-center bg-blue-500 p-3">
+    <View className="flex h-screen items-center justify-center bg-blue-500 p-3">
       <Text className="text-white">Hello World</Text>
     </View>
   );
