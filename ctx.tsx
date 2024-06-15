@@ -39,7 +39,7 @@ export function SessionProvider(props: React.PropsWithChildren) {
       setSession(credentials.user.uid);
       return true;
     } catch (e) {
-      alert("Invalid email or password");
+      alert("Invalid email or password, please try again." + e);
       return false;
     }
   };
