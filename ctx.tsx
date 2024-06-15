@@ -4,12 +4,12 @@ import { FIREBASE_AUTH } from "./FirebaseConfig";
 import { useStorageState } from "./useStorageState";
 
 const AuthContext = React.createContext<{
-  signIn: (email: string, password: string) => void;
+  signIn: (email: string, password: string) => Promise<boolean>;
   signOut: () => void;
   session?: string | null;
   isLoading: boolean;
 }>({
-  signIn: () => null,
+  signIn: () => Promise.resolve(false),
   signOut: () => null,
   session: null,
   isLoading: false,
@@ -29,26 +29,29 @@ export function useSession() {
 
 export function SessionProvider(props: React.PropsWithChildren) {
   const [[isLoading, session], setSession] = useStorageState("session");
+  const signIn = async (email: string, password: string) => {
+    try {
+      const credentials = await signInWithEmailAndPassword(
+        FIREBASE_AUTH,
+        email,
+        password,
+      );
+      setSession(credentials.user.uid);
+      return true;
+    } catch (e) {
+      alert("Invalid email or password");
+      return false;
+    }
+  };
+  const signOut = () => {
+    setSession(null);
+  };
 
   return (
     <AuthContext.Provider
       value={{
-        signIn: async (email, password) => {
-          try {
-            const credentials = await signInWithEmailAndPassword(
-              FIREBASE_AUTH,
-              email,
-              password,
-            );
-            setSession(credentials.user.uid);
-            alert("Signed in!");
-          } catch (e) {
-            alert("Invalid email or password");
-          }
-        },
-        signOut: () => {
-          setSession(null);
-        },
+        signIn,
+        signOut,
         session,
         isLoading,
       }}>

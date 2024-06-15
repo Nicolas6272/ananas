@@ -9,6 +9,13 @@ export default function SignIn() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
+  const handleSignIn = async () => {
+    const SignInWORK = await signIn(email, password);
+    if (SignInWORK) {
+      router.replace("/");
+    }
+  };
+
   return (
     <View className="flex h-screen items-center justify-center gap-4 bg-black p-3">
       <TextInput
@@ -27,11 +34,7 @@ export default function SignIn() {
       />
       <Text
         className="rounded-md bg-blue-500 p-2 text-white"
-        onPress={async () => {
-          signIn(email, password);
-          console.log("Signing in...");
-          router.replace("/");
-        }}>
+        onPress={handleSignIn}>
         Sign In
       </Text>
     </View>
