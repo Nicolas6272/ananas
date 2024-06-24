@@ -7,7 +7,7 @@ export default () => {
       <Tabs.Screen
         name="index"
         options={{
-          headerShown: true,
+          headerShown: false,
           title: "Home",
           tabBarIcon: ({ color, size }) => (
             <FontAwesome name="home" color={color} size={size} />
