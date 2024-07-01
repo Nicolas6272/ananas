@@ -1,12 +1,12 @@
-import { collection, getDocs, query, where } from "firebase/firestore";
+import { collection, onSnapshot, query, where } from "firebase/firestore";
 import { useEffect, useState } from "react";
 import { Text, View } from "react-native";
+import { Player } from "~/types";
 import { FIREBASE_DB } from "../../../FirebaseConfig";
-import { useSession } from "../../../ctx";
+// import { useSession } from "../../../src/context/";
 
 const FavPage = () => {
-  const { signOut } = useSession();
-  const [players, setPlayers] = useState([]);
+  const [players, setPlayers] = useState<Player[]>([]);
 
   const playerRef = collection(FIREBASE_DB, "player");
 
@@ -15,12 +15,13 @@ const FavPage = () => {
     const fetchPlayers = async () => {
       const playerQuery = query(playerRef, where("age", ">", 22));
 
-      const snapshot = await getDocs(playerRef);
-      const playersList = snapshot.docs.map(doc => ({
-        id: doc.id,
-        ...doc.data(),
-      }));
-      setPlayers(playersList);
+      const snapshot = onSnapshot(playerQuery, querySnapshot => {
+        const players: Player[] = [];
+        querySnapshot.forEach(doc => {
+          players.push(doc.data() as Player);
+        });
+        setPlayers(players);
+      });
     };
 
     fetchPlayers();
@@ -35,7 +36,6 @@ const FavPage = () => {
           <Text>{player.lastname}</Text>
         </View>
       ))}
-      <Text onPress={signOut}>LOGOUT!</Text>
     </View>
   );
 };

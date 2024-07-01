@@ -1,10 +1,30 @@
-import { Slot } from "expo-router";
-import { SessionProvider } from "../ctx";
+import { Slot, router, useSegments } from "expo-router";
+import { useEffect } from "react";
+import { AuthContextProvider, useAuth } from "~/context/authContext";
 
-export default function Root() {
+const MainLayout = () => {
+  const { isAuthenticated } = useAuth();
+  const segements = useSegments();
+
+  useEffect(() => {
+    // check if the user is authenticated
+    if (typeof isAuthenticated === "undefined") return;
+    const inApp = segements.includes("(app)");
+
+    if (isAuthenticated && !inApp) {
+      router.replace("home");
+    } else if (!isAuthenticated && inApp) {
+      router.replace("signIn");
+    }
+  }, [isAuthenticated]);
+
+  return <Slot />;
+};
+
+export default function RootLayout() {
   return (
-    <SessionProvider>
-      <Slot />
-    </SessionProvider>
+    <AuthContextProvider>
+      <MainLayout />
+    </AuthContextProvider>
   );
 }
