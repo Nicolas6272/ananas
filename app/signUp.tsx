@@ -13,7 +13,7 @@ export default function SignUp() {
   const { register } = useAuth();
 
   const handleRegister = async () => {
-    const response = await register(username, email, password);
+    await register(username, email, password);
   };
 
   return (

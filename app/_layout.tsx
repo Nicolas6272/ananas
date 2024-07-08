@@ -7,6 +7,7 @@ const MainLayout = () => {
   const segements = useSegments();
 
   useEffect(() => {
+    console.log("useEffect");
     // check if the user is authenticated
     if (typeof isAuthenticated === "undefined") return;
     const inApp = segements.includes("(app)");
@@ -14,6 +15,8 @@ const MainLayout = () => {
     if (isAuthenticated && !inApp) {
       router.replace("home");
     } else if (!isAuthenticated && inApp) {
+      router.replace("signIn");
+    } else {
       router.replace("signIn");
     }
   }, [isAuthenticated]);

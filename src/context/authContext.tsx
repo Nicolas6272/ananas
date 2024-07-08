@@ -15,13 +15,14 @@ export const AuthContextProvider = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   useEffect(() => {
+    console.log("🚀 ~ AuthContextProvider ~ user:", user);
     const unsub = onAuthStateChanged(auth, user => {
-      console.log("🚀 ~ unsub ~ user:", user);
       if (user) {
         setIsAuthenticated(true);
         setUser(user);
         updateData(user.uid);
       } else {
+        console.log("🚀 ~ AuthContextProvider ~ user no ");
         setIsAuthenticated(false);
         setUser(null);
       }
