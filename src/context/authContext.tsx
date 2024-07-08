@@ -1,4 +1,12 @@
+import {
+  createUserWithEmailAndPassword,
+  onAuthStateChanged,
+  signInWithEmailAndPassword,
+  signOut,
+} from "firebase/auth";
+import { doc, getDoc, setDoc } from "firebase/firestore";
 import { createContext, useContext, useEffect, useState } from "react";
+import { auth, db } from "~/db/firebaseConfig";
 
 export const AuthContext = createContext(null);
 
@@ -7,32 +15,70 @@ export const AuthContextProvider = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   useEffect(() => {
-    setTimeout(() => {
-      setIsAuthenticated(false);
-    }, 1000);
+    const unsub = onAuthStateChanged(auth, user => {
+      console.log("🚀 ~ unsub ~ user:", user);
+      if (user) {
+        setIsAuthenticated(true);
+        setUser(user);
+        updateData(user.uid);
+      } else {
+        setIsAuthenticated(false);
+        setUser(null);
+      }
+    });
+    return unsub;
   }, []);
 
-  const login = async (email, passwowrd) => {
-    try {
-      console.log("Logging in");
-    } catch (error) {
-      console.error(error);
+  const updateData = async (userId: string) => {
+    const docRef = doc(db, "users", userId);
+    const docSnap = await getDoc(docRef);
+
+    if (docSnap.exists()) {
+      const data = docSnap.data();
+      setUser({ ...user, username: data.username, userId: data.userId });
+    } else {
+      console.log("No such document!");
     }
   };
 
-  const logout = async (email, password) => {
+  const login = async (email: string, passwowrd: string) => {
     try {
-      console.log("Logging out");
+      const response = await signInWithEmailAndPassword(auth, email, passwowrd);
+      return { success: true };
     } catch (error) {
-      console.error(error);
+      return { success: false, error };
     }
   };
 
-  const register = async (email, password) => {
+  const logout = async () => {
     try {
-      console.log("Registering");
+      await signOut(auth);
+      return { success: true };
     } catch (error) {
-      console.error(error);
+      return { success: false, error };
+    }
+  };
+
+  const register = async (
+    username: string,
+    email: string,
+    password: string,
+  ) => {
+    try {
+      const response = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password,
+      );
+
+      await setDoc(doc(db, "users", response.user.uid), {
+        username,
+        userId: response?.user?.uid,
+      });
+
+      return { success: true, data: response?.user };
+    } catch (error) {
+      return { success: false, error };
     }
   };
 

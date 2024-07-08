@@ -1,14 +1,14 @@
 import { collection, onSnapshot, query, where } from "firebase/firestore";
 import { useEffect, useState } from "react";
 import { Text, View } from "react-native";
+import { db } from "~/db/firebaseConfig";
 import { Player } from "~/types";
-import { FIREBASE_DB } from "../../../FirebaseConfig";
 // import { useSession } from "../../../src/context/";
 
 const FavPage = () => {
   const [players, setPlayers] = useState<Player[]>([]);
 
-  const playerRef = collection(FIREBASE_DB, "player");
+  const playerRef = collection(db, "player");
 
   useEffect(() => {
     console.log("fetching players");
