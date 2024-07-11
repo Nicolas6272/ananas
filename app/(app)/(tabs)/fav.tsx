@@ -11,7 +11,6 @@ const FavPage = () => {
   const playerRef = collection(db, "player");
 
   useEffect(() => {
-    console.log("fetching players");
     const fetchPlayers = async () => {
       const playerQuery = query(playerRef, where("age", ">", 22));
 

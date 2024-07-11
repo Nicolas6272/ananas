@@ -3,7 +3,6 @@ import { useAuth } from "~/context/authContext";
 
 export default function HomePage() {
   const { logout, user } = useAuth();
-  console.log("🚀 ~ HomePage ~ user:", user);
   const handleLogout = async () => {
     await logout();
   };

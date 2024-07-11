@@ -7,7 +7,6 @@ const MainLayout = () => {
   const segements = useSegments();
 
   useEffect(() => {
-    console.log("useEffect");
     // check if the user is authenticated
     if (typeof isAuthenticated === "undefined") return;
     const inApp = segements.includes("(app)");

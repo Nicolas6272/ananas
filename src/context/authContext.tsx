@@ -5,24 +5,47 @@ import {
   signOut,
 } from "firebase/auth";
 import { doc, getDoc, setDoc } from "firebase/firestore";
-import { createContext, useContext, useEffect, useState } from "react";
+import { FC, createContext, useContext, useEffect, useState } from "react";
 import { auth, db } from "~/db/firebaseConfig";
+import { User } from "~/types";
 
-export const AuthContext = createContext(null);
+interface AuthContextType {
+  user: User | null;
+  isAuthenticated: boolean;
+  login: (email: string, passwowrd: string) => Promise<AuthFunctionReturnType>;
+  logout: () => Promise<AuthFunctionReturnType>;
+  register: (
+    username: string,
+    email: string,
+    password: string,
+  ) => Promise<AuthFunctionReturnType>;
+}
 
-export const AuthContextProvider = ({ children }) => {
-  const [user, setUser] = useState(null);
+export const AuthContext = createContext<AuthContextType | null>(null);
+
+type AuthFunctionReturnType = {
+  success: boolean;
+  error?: any;
+  data?: any;
+};
+
+type AuthContextProviderProps = {
+  children: React.ReactNode;
+};
+
+export const AuthContextProvider: FC<AuthContextProviderProps> = ({
+  children,
+}) => {
+  const [user, setUser] = useState<User | null>(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   useEffect(() => {
-    console.log("🚀 ~ AuthContextProvider ~ user:", user);
     const unsub = onAuthStateChanged(auth, user => {
       if (user) {
         setIsAuthenticated(true);
-        setUser(user);
-        updateData(user.uid);
+        // setUser(user);
+        updateUserData(user.uid);
       } else {
-        console.log("🚀 ~ AuthContextProvider ~ user no ");
         setIsAuthenticated(false);
         setUser(null);
       }
@@ -30,28 +53,31 @@ export const AuthContextProvider = ({ children }) => {
     return unsub;
   }, []);
 
-  const updateData = async (userId: string) => {
+  const updateUserData = async (userId: string) => {
     const docRef = doc(db, "users", userId);
     const docSnap = await getDoc(docRef);
 
     if (docSnap.exists()) {
-      const data = docSnap.data();
-      setUser({ ...user, username: data.username, userId: data.userId });
+      const user = docSnap.data();
+      setUser(user as User);
     } else {
       console.log("No such document!");
     }
   };
 
-  const login = async (email: string, passwowrd: string) => {
+  const login = async (
+    email: string,
+    passwowrd: string,
+  ): Promise<AuthFunctionReturnType> => {
     try {
-      const response = await signInWithEmailAndPassword(auth, email, passwowrd);
+      await signInWithEmailAndPassword(auth, email, passwowrd);
       return { success: true };
     } catch (error) {
       return { success: false, error };
     }
   };
 
-  const logout = async () => {
+  const logout = async (): Promise<AuthFunctionReturnType> => {
     try {
       await signOut(auth);
       return { success: true };
@@ -64,7 +90,7 @@ export const AuthContextProvider = ({ children }) => {
     username: string,
     email: string,
     password: string,
-  ) => {
+  ): Promise<AuthFunctionReturnType> => {
     try {
       const response = await createUserWithEmailAndPassword(
         auth,
@@ -104,3 +130,4 @@ export const useAuth = () => {
   }
   return value;
 };
+
