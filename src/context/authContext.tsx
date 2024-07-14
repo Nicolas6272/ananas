@@ -1,13 +1,20 @@
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import {
   createUserWithEmailAndPassword,
+  getReactNativePersistence,
+  initializeAuth,
   onAuthStateChanged,
   signInWithEmailAndPassword,
   signOut,
 } from "firebase/auth";
 import { doc, getDoc, setDoc } from "firebase/firestore";
 import { FC, createContext, useContext, useEffect, useState } from "react";
-import { auth, db } from "~/db/firebaseConfig";
+import { app, db } from "~/db/firebaseConfig";
 import { User } from "~/types";
+
+export const auth = initializeAuth(app, {
+  persistence: getReactNativePersistence(AsyncStorage),
+});
 
 interface AuthContextType {
   user: User | null;
@@ -130,4 +137,3 @@ export const useAuth = () => {
   }
   return value;
 };
-

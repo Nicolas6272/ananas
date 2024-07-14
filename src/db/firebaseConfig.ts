@@ -1,6 +1,4 @@
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { initializeApp } from "firebase/app";
-import { getReactNativePersistence, initializeAuth } from "firebase/auth";
 import { collection, getFirestore } from "firebase/firestore";
 
 const firebaseConfig = {
@@ -14,10 +12,6 @@ const firebaseConfig = {
 };
 
 // Initialize Firebase
-const app = initializeApp(firebaseConfig);
-export const auth = initializeAuth(app, {
-  persistence: getReactNativePersistence(AsyncStorage),
-});
-
+export const app = initializeApp(firebaseConfig);
 export const db = getFirestore(app);
 export const playersCollection = collection(db, "players");
