@@ -1,4 +1,7 @@
+import { config } from "@gluestack-ui/config";
+import { GluestackUIProvider } from "@gluestack-ui/themed";
 import { Slot, router, useSegments } from "expo-router";
+import { StatusBar } from "expo-status-bar";
 import { useEffect } from "react";
 import { AuthContextProvider, useAuth } from "~/context/authContext";
 
@@ -26,7 +29,10 @@ const MainLayout = () => {
 export default function RootLayout() {
   return (
     <AuthContextProvider>
-      <MainLayout />
+      <StatusBar style="dark" />
+      <GluestackUIProvider config={config}>
+        <MainLayout />
+      </GluestackUIProvider>
     </AuthContextProvider>
   );
 }

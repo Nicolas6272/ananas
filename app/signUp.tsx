@@ -1,5 +1,4 @@
 import { useRouter } from "expo-router";
-import { StatusBar } from "expo-status-bar";
 import { useState } from "react";
 import { Text, TextInput, TouchableOpacity, View } from "react-native";
 import { useAuth } from "~/context/authContext";
@@ -18,7 +17,6 @@ export default function SignUp() {
 
   return (
     <View className="flex h-full w-full bg-green-400 pt-[12%]">
-      <StatusBar style="dark" />
       <View className="flex h-full w-full items-center justify-center bg-purple-400">
         <View className="flex w-2/3 items-center justify-center gap-8">
           <Text>SIGNUP PAGE</Text>

@@ -1,4 +1,5 @@
-import { Text, TouchableOpacity, View } from "react-native";
+import { Text, View } from "react-native";
+import ButtonPrimary from "~/components/atoms/button/ButtonPrimary";
 import { useAuth } from "~/context/authContext";
 
 export default function HomePage() {
@@ -8,13 +9,9 @@ export default function HomePage() {
   };
 
   return (
-    <View className="flex h-full items-center justify-center gap-4 bg-blue-500">
+    <View className="flex h-full items-center justify-center bg-blue-500">
       <Text>Bonjour {user?.username}</Text>
-      <TouchableOpacity
-        onPress={handleLogout}
-        className="rounded-lg bg-white p-2">
-        <Text>LOGOUT</Text>
-      </TouchableOpacity>
+      <ButtonPrimary />
     </View>
   );
 }
