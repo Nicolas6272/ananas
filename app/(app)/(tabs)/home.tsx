@@ -13,7 +13,6 @@ export default function HomePage() {
   };
   const matchRef = collection(db, "match");
   const [matchs, setMatchs] = useState<Match[]>([]);
-  console.log("🚀 ~ HomePage ~ matchs:", matchs);
 
   useEffect(() => {
     const fetchMatch = async () => {
