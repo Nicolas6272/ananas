@@ -9,7 +9,7 @@ import {
   where,
 } from "firebase/firestore";
 import { Match } from "~/types";
-import { db } from "../src/db/firebaseConfig";
+import { db } from "./firebaseConfig";
 
 const fetchLiveTennisEvents = async (): Promise<Match[]> => {
   const options = {
