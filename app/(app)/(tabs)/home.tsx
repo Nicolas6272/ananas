@@ -1,3 +1,4 @@
+import { ScrollView } from "@gluestack-ui/themed";
 import { collection, onSnapshot } from "firebase/firestore";
 import { useEffect, useState } from "react";
 import { Text, View } from "react-native";
@@ -30,18 +31,20 @@ export default function HomePage() {
 
   return (
     <View className="h-full bg-blue-500">
-      <View className="flex h-full flex-col items-center justify-center space-y-2 bg-green-400">
+      <View className="mt-20 flex h-full flex-col items-center justify-center space-y-2 bg-green-400">
         <Text>Bonjour {user?.username}</Text>
-        {matchs.map((match, index) => (
-          <View className="flex flex-row gap-2" key={index}>
-            <Text>{match.player1}</Text>
-            <Text>{match.player1Score.period1}</Text>
-            <Text>{match.player1Score.period2}</Text>
-            <Text>{match.player2}</Text>
-            <Text>{match.player2Score.period1}</Text>
-            <Text>{match.player2Score.period2}</Text>
-          </View>
-        ))}
+        <ScrollView>
+          {matchs.map((match, index) => (
+            <View className="flex flex-row gap-2" key={index}>
+              <Text>{match.player1}</Text>
+              <Text>{match.player1Score.period1}</Text>
+              <Text>{match.player1Score.period2}</Text>
+              <Text>{match.player2}</Text>
+              <Text>{match.player2Score.period1}</Text>
+              <Text>{match.player2Score.period2}</Text>
+            </View>
+          ))}
+        </ScrollView>
         <ButtonPrimary />
       </View>
     </View>

@@ -2,6 +2,7 @@ import axios from "axios";
 import { deleteApp } from "firebase/app";
 import {
   collection,
+  deleteDoc,
   doc,
   getDocs,
   query,
@@ -90,4 +91,18 @@ const addMatchesToFirestore = async () => {
   }
 };
 
+const deleteAllMatches = async () => {
+  const matchesCollection = collection(db, "match");
+  const querySnapshot = await getDocs(matchesCollection);
+  querySnapshot.forEach(async doc => {
+    try {
+      await deleteDoc(doc.ref);
+      console.log("Match deleted successfully!");
+    } catch (error) {
+      console.error("Error deleting match: ", error);
+    }
+  });
+};
+
 addMatchesToFirestore();
+// deleteAllMatches();
