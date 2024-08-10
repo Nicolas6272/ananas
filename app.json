@@ -36,6 +36,14 @@
       "expo-router",
       "expo-secure-store"
     ],
-    "scheme": "sollow"
+    "scheme": "sollow",
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "5114113f-9515-4e5c-9191-443fdc233ace"
+      }
+    }
   }
 }
