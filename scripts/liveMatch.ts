@@ -1,108 +1,72 @@
-import axios from "axios";
 import { deleteApp } from "firebase/app";
+import { addDoc, collection, getDocs, query, where } from "firebase/firestore";
+import { updateMatchInTournament } from "../src/server/match";
 import {
-  collection,
-  deleteDoc,
-  doc,
-  getDocs,
-  query,
-  setDoc,
-  where,
-} from "firebase/firestore";
-import { Match } from "~/types";
+  fetchLiveTennisTournamentsIds,
+  setTournament,
+} from "../src/server/tournament";
 import { db } from "./firebaseConfig";
 
-const fetchLiveTennisEvents = async (): Promise<Match[]> => {
-  const options = {
-    method: "GET",
-    url: "https://allsportsapi2.p.rapidapi.com/api/tennis/events/live",
-    headers: {
-      "x-rapidapi-host": "allsportsapi2.p.rapidapi.com",
-      "x-rapidapi-key": "0285a688b9mshffca91e7709c68fp193cfbjsn1a821f7fe710",
-    },
-  };
-
+/// ACTUALIZE LIVE TOURNAMENTS IN DB ///
+const setLiveTournament = async () => {
+  console.info("-- Starting to set live tournaments in the database --");
   try {
-    const response = await axios.request(options);
-    const events = response.data.events;
-    const liveMatch: Match[] = events.map((event: any) => {
-      const player1 = event.awayTeam.name;
-      const player1Score = event.awayScore;
-      const player2 = event.homeTeam.name;
-      const player2Score = event.homeScore;
-      return { player1, player1Score, player2, player2Score } as Match;
-    });
-    return liveMatch;
+    const tournamentIds = await fetchLiveTennisTournamentsIds();
+    console.info(
+      "Tournament IDs fetched successfully with ids: ",
+      tournamentIds,
+    );
+    for (const tournamentId of tournamentIds) {
+      await setTournament(tournamentId, db);
+    }
+    console.info("\nTournament operation completed successfully.");
   } catch (error) {
-    console.error(error);
-    return [];
+    console.error("Error in main:", error);
+  } finally {
+    await deleteApp(db.app);
+    console.log("👌 App deleted successfully.");
   }
 };
 
-const addOrUpdateMatch = async (match: Match) => {
-  const matchesCollection = collection(db, "match");
-
-  // Create a query against the collection
-  const q = query(
-    matchesCollection,
-    where("player1", "==", match.player1),
-    where("player2", "==", match.player2),
-  );
-
+const setEventToTournament = async (tournamentId: number, matchData: any) => {
+  /// test if match tournament is set in the database
+  const tournamentCollection = collection(db, "tournaments");
+  const q = query(tournamentCollection, where("id", "==", tournamentId));
   const querySnapshot = await getDocs(q);
   if (querySnapshot.empty) {
-    // No matching documents, add new match
-    const newMatchRef = doc(matchesCollection);
-    try {
-      await setDoc(newMatchRef, match);
-      console.log(
-        `Match between ${match.player1} and ${match.player2} added successfully!`,
-      );
-    } catch (error) {
-      console.error("Error adding match: ", error);
-    }
-  } else {
-    // Matching document found, update it
-    querySnapshot.forEach(async doc => {
-      try {
-        console.log("Updating match: ", doc.id);
-        await setDoc(doc.ref, match, { merge: true });
-        console.log(
-          `Match between ${match.player1} and ${match.player2} updated successfully!`,
-        );
-      } catch (error) {
-        console.error("Error updating match: ", error);
-      }
-    });
-  }
-};
-
-const addMatchesToFirestore = async () => {
-  const liveMatch = await fetchLiveTennisEvents();
-  for (const match of liveMatch) {
-    await addOrUpdateMatch(match);
-  }
-
-  console.log("All matches processed successfully!");
-  try {
+    console.log("Tournament with this ID does not exist. No action taken.");
     await deleteApp(db.app);
+  }
+
+  ///test if match already exist in the database
+  const matchCollection = collection(querySnapshot.docs[0].ref, "matches");
+  const q2 = query(matchCollection, where("id", "==", matchData.id));
+  const querySnapshot2 = await getDocs(q2);
+  if (!querySnapshot2.empty) {
+    await updateMatchInTournament(querySnapshot, matchData.id, matchData);
+    await deleteApp(db.app);
+    return;
+  }
+
+  /// add match to the tournament
+  try {
+    await addDoc(matchCollection, matchData);
+    console.log("Match added successfully.");
   } catch (error) {
-    console.error("Error deleting app: ", error);
+    console.error("Error adding match:", error);
+  } finally {
+    await deleteApp(db.app);
+    console.log("App deleted successfully.");
   }
 };
 
-const deleteAllMatches = async () => {
-  const matchesCollection = collection(db, "match");
-  const querySnapshot = await getDocs(matchesCollection);
-  querySnapshot.forEach(async doc => {
-    try {
-      await deleteDoc(doc.ref);
-      console.log("Match deleted successfully!");
-    } catch (error) {
-      console.error("Error deleting match: ", error);
-    }
-  });
-};
+////////// EVENT //////
 
-addMatchesToFirestore();
-// deleteAllMatches();
+setLiveTournament();
+// setEventToTournament(2449, {
+//   id: 2342,
+//   teamA: "Nadal R.",
+//   teamB: "Djokovic N.",
+//   scoreA: 6,
+//   scoreB: 4,
+// });
