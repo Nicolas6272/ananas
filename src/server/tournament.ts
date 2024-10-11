@@ -1,7 +1,8 @@
 import axios from "axios";
 import { addDoc, collection, getDocs, query, where } from "firebase/firestore";
+import { ApiTournament, FirebaseTournament } from "~/types";
 
-///FETCH
+/// FETCH ///
 
 export const fetchLiveTennisTournamentsIds = async () => {
   console.log("\n🚀 ~ fetchLiveTennisTournamentsIds ~");
@@ -43,30 +44,12 @@ export const fetchTounamentInfo = async (tournamentId: number) => {
 };
 
 ///MAP
-
-///SET
-export const setTournament = async (
+export const mapTournament = (
   tournamentId: number,
-  db: any,
-): Promise<void> => {
-  console.info("\n🚀 ~ setTournament ~ tournamentId:", tournamentId);
-  const tournamentCollection = collection(db, "tournaments");
-  const q = query(tournamentCollection, where("id", "==", tournamentId));
-  const querySnapshot = await getDocs(q);
-
-  if (!querySnapshot.empty) {
-    console.log("Tournament with this ID already exists. No action taken.");
-    return;
-  }
-
-  const { surfaceType, uniqueTournament, gender } =
-    await fetchTounamentInfo(tournamentId);
-  const { name, slug, tennisPoints } = uniqueTournament;
-
-  if (slug.includes("doubles")) {
-    console.log("Tournament is a doubles event. No action taken.");
-    return;
-  }
+  tournamentInfo: ApiTournament,
+): FirebaseTournament => {
+  const { surfaceType, gender, uniqueTournament } = tournamentInfo;
+  const { name, tennisPoints } = uniqueTournament;
 
   const surface = surfaceType.includes("Hard")
     ? "hard"
@@ -84,14 +67,45 @@ export const setTournament = async (
 
   const playerSexe = gender === "M" ? "men" : "female";
 
+  return {
+    id: tournamentId,
+    name,
+    surface,
+    level,
+    playerSexe,
+  };
+};
+
+///SET
+export const setTournament = async (
+  tournamentId: number,
+  db: any,
+): Promise<void> => {
+  console.info("\n🚀 ~ setTournament ~ tournamentId:", tournamentId);
+  const tournamentCollection = collection(db, "tournaments");
+  const q = query(tournamentCollection, where("id", "==", tournamentId));
+  const querySnapshot = await getDocs(q);
+
+  if (!querySnapshot.empty) {
+    console.log("Tournament with this ID already exists. No action taken.");
+    return;
+  }
+
+  // fetch tournament info
+  const tournamentInfo = (await fetchTounamentInfo(
+    tournamentId,
+  )) as ApiTournament;
+
+  if (tournamentInfo.uniqueTournament.slug.includes("doubles")) {
+    console.log("Tournament is a doubles event. No action taken.");
+    return;
+  }
+
+  //map tournament info
+  const newTournamentData = mapTournament(tournamentId, tournamentInfo);
+
   try {
-    await addDoc(tournamentCollection, {
-      id: tournamentId,
-      city: name,
-      surface,
-      level,
-      playerSexe,
-    });
+    await addDoc(tournamentCollection, newTournamentData);
     console.log("New tournament created successfully.");
   } catch (error) {
     console.error("Error creating tournament:", error);
