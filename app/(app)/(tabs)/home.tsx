@@ -5,7 +5,7 @@ import { Text, View } from "react-native";
 import ButtonPrimary from "~/components/atoms/button/ButtonPrimary";
 import { useAuth } from "~/context/authContext";
 import { db } from "~/db/firebaseConfig";
-import { Match } from "~/types";
+import { ApiMatch } from "~/types";
 
 export default function HomePage() {
   const { logout, user } = useAuth();
@@ -13,14 +13,14 @@ export default function HomePage() {
     await logout();
   };
   const matchRef = collection(db, "match");
-  const [matchs, setMatchs] = useState<Match[]>([]);
+  const [matchs, setMatchs] = useState<ApiMatch[]>([]);
 
   useEffect(() => {
     const fetchMatch = async () => {
       const snapshot = onSnapshot(matchRef, querySnapshot => {
-        const matchs: Match[] = [];
+        const matchs: ApiMatch[] = [];
         querySnapshot.forEach(doc => {
-          matchs.push(doc.data() as Match);
+          matchs.push(doc.data() as ApiMatch);
         });
         setMatchs(matchs);
       });
