@@ -22,5 +22,5 @@ export default function HomePage() {
     // fetchMatch();
   }, []);
 
-  return <View className="h-full bg-blue-500" />;
+  return <View className="bg-dark- h-full" />;
 }
