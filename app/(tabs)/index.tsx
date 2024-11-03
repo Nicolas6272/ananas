@@ -24,7 +24,8 @@ export default function HomePage() {
         tournamentsSnapshot.forEach((tournamentDoc) => {
           const tournamentData = {
             ...tournamentDoc.data(),
-          } as FirebaseTournamentWithMatches;
+            id: tournamentDoc.id,
+          } as unknown as FirebaseTournamentWithMatches;
 
           const matchesRef = collection(
             db,
@@ -36,21 +37,10 @@ export default function HomePage() {
               matches.push(matchDoc.data() as FirebaseMatch);
             });
 
-            // Grouper les matchs par stade
-            const matchesByStadium = matches.reduce(
-              (acc: { [key: string]: FirebaseMatch[] }, match) => {
-                const stadium = match.stadium ?? "Unknown"; // Assurez-vous que chaque match a un 'stadium'
-                if (!acc[stadium]) acc[stadium] = [];
-                acc[stadium].push(match);
-                return acc;
-              },
-              {},
-            );
-
-            // Ajouter les matchs triés par stade au tournoi
+            // Ajouter les matchs au tournoi
             tournamentsMap.set(tournamentDoc.id, {
               ...tournamentData,
-              matchesByStadium,
+              matches,
             });
 
             // Convertir la Map en tableau et mettre à jour le state
@@ -65,12 +55,14 @@ export default function HomePage() {
     fetchTournamentsAndMatches();
   }, []);
 
+  console.log(tournaments);
+
   return (
     <ScrollView
       contentContainerStyle={{
         alignItems: "center",
       }}
-      className="flex w-full bg-background-950 p-5"
+      className="flex w-full flex-col bg-background-950 p-5"
     >
       {tournaments.map((tournament) => (
         <View key={tournament.id} className="w-full overflow-hidden rounded-lg">
@@ -83,30 +75,32 @@ export default function HomePage() {
             <StylisedText>Homme</StylisedText>
           </View>
 
-          {/* Affichage des matchs groupés par stade */}
-          {Object.entries(tournament.matchesByStadium).map(
-            ([stadium, matches]) => (
-              <View key={stadium} className="mt-4">
-                <StylisedText fontSize="$lg" fontWeight="$bold">
-                  {stadium}
-                </StylisedText>
-                {matches.map((match) => (
-                  <View key={match.id} className="flex w-full">
-                    <View className="flex flex-row justify-between">
-                      <View className="flex flex-col gap-1">
-                        <StylisedText>{match.playerAName}</StylisedText>
-                        <StylisedText>{match.playerBName}</StylisedText>
-                      </View>
-                      <View className="flex flex-col gap-1">
-                        <StylisedText>{match.period1A}</StylisedText>
-                        <StylisedText>{match.period1B}</StylisedText>
-                      </View>
-                    </View>
+          {/* Affichage des matchs */}
+          <View className="flex flex-col gap-3 p-2">
+            {tournament.matches.map((match) => (
+              <View
+                key={match.id}
+                className="flex flex-row items-center justify-between"
+              >
+                <View className="flex flex-col gap-1">
+                  <StylisedText>{match.playerAName}</StylisedText>
+                  <StylisedText>{match.playerBName}</StylisedText>
+                </View>
+                <View className="flex flex-col gap-1">
+                  <View className="flex flex-row gap-1">
+                    <StylisedText>{match.period1A}</StylisedText>
+                    <StylisedText>{match.period2A}</StylisedText>
+                    <StylisedText>{match.period3A}</StylisedText>
                   </View>
-                ))}
+                  <View className="flex flex-row gap-1">
+                    <StylisedText>{match.period1B}</StylisedText>
+                    <StylisedText>{match.period2B}</StylisedText>
+                    <StylisedText>{match.period3B}</StylisedText>
+                  </View>
+                </View>
               </View>
-            ),
-          )}
+            ))}
+          </View>
         </View>
       ))}
     </ScrollView>

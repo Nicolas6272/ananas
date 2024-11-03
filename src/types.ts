@@ -31,7 +31,7 @@ export type FirebaseMatch = {
 };
 
 export type FirebaseTournamentWithMatches = FirebaseTournament & {
-  matchesByStadium: Record<string, FirebaseMatch[]>;
+  matches: FirebaseMatch[];
 };
 
 /// API TYPES
