@@ -61,11 +61,16 @@ export default function HomePage() {
     <ScrollView
       contentContainerStyle={{
         alignItems: "center",
+        justifyContent: "center",
+        gap: 20,
       }}
       className="flex w-full flex-col bg-background-950 p-5"
     >
       {tournaments.map((tournament) => (
-        <View key={tournament.id} className="w-full overflow-hidden rounded-lg">
+        <View
+          key={tournament.id}
+          className="flex w-full overflow-hidden rounded-lg bg-background-900"
+        >
           <View className="flex flex-row items-center gap-3 bg-blue-500 px-2 py-3">
             <StylisedText fontSize="$sm" fontWeight="$semibold">
               {tournament.name}
@@ -75,8 +80,7 @@ export default function HomePage() {
             <StylisedText>Homme</StylisedText>
           </View>
 
-          {/* Affichage des matchs */}
-          <View className="flex flex-col gap-3 p-2">
+          <View className="flex flex-col gap-3 p-3">
             {tournament.matches.map((match) => (
               <View
                 key={match.id}

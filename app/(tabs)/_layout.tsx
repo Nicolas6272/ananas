@@ -1,5 +1,6 @@
 import { Tabs } from "expo-router";
-import { Calendar, Trophy } from "lucide-react-native";
+import { Calendar } from "lucide-react-native";
+
 import Header from "~/components/organisms/Header";
 
 export default () => {
@@ -15,7 +16,8 @@ export default () => {
           borderTopWidth: 1,
         },
         header: ({ options }) => <Header title={options.title} />,
-      })}>
+      })}
+    >
       <Tabs.Screen
         name="index"
         options={{
@@ -25,13 +27,13 @@ export default () => {
           ),
         }}
       />
-      <Tabs.Screen
+      {/* <Tabs.Screen
         name="tournament"
         options={{
           title: "Tournament",
           tabBarIcon: ({ color, size }) => <Trophy color={color} size={size} />,
         }}
-      />
+      /> */}
     </Tabs>
   );
 };
