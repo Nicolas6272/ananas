@@ -1,39 +1,39 @@
-import { Text, View } from "react-native";
-// import { Player } from "~/types";
-// import { useSession } from "../../../src/context/";
+// import { Text, View } from "react-native";
+// // import { Player } from "~/types";
+// // import { useSession } from "../../../src/context/";
 
-const FavPage = () => {
-  // const [players, setPlayers] = useState<Player[]>([]);
+// const FavPage = () => {
+//   // const [players, setPlayers] = useState<Player[]>([]);
 
-  // const playerRef = collection(db, "player");
+//   // const playerRef = collection(db, "player");
 
-  // useEffect(() => {
-  //   const fetchPlayers = async () => {
-  //     const playerQuery = query(playerRef, where("age", ">", 22));
+//   // useEffect(() => {
+//   //   const fetchPlayers = async () => {
+//   //     const playerQuery = query(playerRef, where("age", ">", 22));
 
-  //     const snapshot = onSnapshot(playerQuery, querySnapshot => {
-  //       const players: Player[] = [];
-  //       querySnapshot.forEach(doc => {
-  //         players.push(doc.data() as Player);
-  //       });
-  //       setPlayers(players);
-  //     });
-  //   };
+//   //     const snapshot = onSnapshot(playerQuery, querySnapshot => {
+//   //       const players: Player[] = [];
+//   //       querySnapshot.forEach(doc => {
+//   //         players.push(doc.data() as Player);
+//   //       });
+//   //       setPlayers(players);
+//   //     });
+//   //   };
 
-  //   fetchPlayers();
-  // }, []);
+//   //   fetchPlayers();
+//   // }, []);
 
-  return (
-    <View className="flex h-full items-center justify-center bg-red-500">
-      <Text>Fav</Text>
-      {/* {players.map((player, index) => (
-        <View className="flex flex-row gap-2" key={index}>
-          <Text>{player.firstname}</Text>
-          <Text>{player.lastname}</Text>
-        </View>
-      ))} */}
-    </View>
-  );
-};
+//   return (
+//     <View className="flex h-full items-center justify-center bg-red-500">
+//       <Text>Fav</Text>
+//       {/* {players.map((player, index) => (
+//         <View className="flex flex-row gap-2" key={index}>
+//           <Text>{player.firstname}</Text>
+//           <Text>{player.lastname}</Text>
+//         </View>
+//       ))} */}
+//     </View>
+//   );
+// };
 
-export default FavPage;
+// export default FavPage;

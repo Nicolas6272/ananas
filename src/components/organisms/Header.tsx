@@ -5,7 +5,7 @@ import {
   View,
 } from "@gluestack-ui/themed";
 import { Bird } from "lucide-react-native";
-import { FC } from "react";
+import { type FC } from "react";
 
 interface HeaderProps {
   title?: string;
@@ -24,7 +24,8 @@ const Header: FC<HeaderProps> = ({ title }) => {
         justifyContent: "space-between",
         alignItems: "center",
         paddingHorizontal: 24,
-      }}>
+      }}
+    >
       <Bird size={32} color="white" />
       <Heading fontSize="$lg" color="white" fontWeight="$bold">
         {title}
