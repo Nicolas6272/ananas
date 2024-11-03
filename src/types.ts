@@ -30,6 +30,10 @@ export type FirebaseMatch = {
   pointB?: string;
 };
 
+export type FirebaseTournamentWithMatches = FirebaseTournament & {
+  matchesByStadium: Record<string, FirebaseMatch[]>;
+};
+
 /// API TYPES
 
 export type ApiTournament = {
