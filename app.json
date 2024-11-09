@@ -19,14 +19,14 @@
       "config": {
         "usesNonExemptEncryption": false
       },
-      "bundleIdentifier": "com.anonymous.sollow"
+      "bundleIdentifier": "com.nicolas6272.sollow"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.anonymous.sollow"
+      "package": "com.nicolas6272.sollow"
     },
     "web": {
       "favicon": "./assets/favicon.png",
