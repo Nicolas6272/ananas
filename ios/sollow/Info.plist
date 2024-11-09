@@ -28,7 +28,7 @@
         <key>CFBundleURLSchemes</key>
         <array>
           <string>sollow</string>
-          <string>com.anonymous.sollow</string>
+          <string>com.nicolas6272.sollow</string>
         </array>
       </dict>
     </array>

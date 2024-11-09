@@ -1,4 +1,4 @@
-package com.anonymous.sollow
+package com.nicolas6272.sollow
 
 import android.app.Application
 import android.content.res.Configuration

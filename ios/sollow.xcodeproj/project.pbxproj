@@ -472,7 +472,7 @@
 					"-lc++",
 				);
 				OTHER_SWIFT_FLAGS = "$(inherited) -D EXPO_CONFIGURATION_DEBUG";
-				PRODUCT_BUNDLE_IDENTIFIER = com.anonymous.sollow;
+				PRODUCT_BUNDLE_IDENTIFIER = com.nicolas6272.sollow;
 				PRODUCT_NAME = sollow;
 				SWIFT_OBJC_BRIDGING_HEADER = "sollow/sollow-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -504,7 +504,7 @@
 					"-lc++",
 				);
 				OTHER_SWIFT_FLAGS = "$(inherited) -D EXPO_CONFIGURATION_RELEASE";
-				PRODUCT_BUNDLE_IDENTIFIER = com.anonymous.sollow;
+				PRODUCT_BUNDLE_IDENTIFIER = com.nicolas6272.sollow;
 				PRODUCT_NAME = sollow;
 				SWIFT_OBJC_BRIDGING_HEADER = "sollow/sollow-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
@@ -670,7 +670,7 @@
 				MARKETING_VERSION = 1.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.anonymous.sollow.Live-match";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.nicolas6272.sollow.Live-match";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
@@ -713,7 +713,7 @@
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MARKETING_VERSION = 1.0;
 				MTL_FAST_MATH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.anonymous.sollow.Live-match";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.nicolas6272.sollow.Live-match";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SWIFT_COMPILATION_MODE = wholemodule;

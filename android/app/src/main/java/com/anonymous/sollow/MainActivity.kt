@@ -1,4 +1,4 @@
-package com.anonymous.sollow
+package com.nicolas6272.sollow
 
 import android.os.Build
 import android.os.Bundle

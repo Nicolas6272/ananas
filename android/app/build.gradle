@@ -83,9 +83,9 @@ android {
     buildToolsVersion rootProject.ext.buildToolsVersion
     compileSdk rootProject.ext.compileSdkVersion
 
-    namespace 'com.anonymous.sollow'
+    namespace 'com.nicolas6272.sollow'
     defaultConfig {
-        applicationId 'com.anonymous.sollow'
+        applicationId 'com.nicolas6272.sollow'
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
