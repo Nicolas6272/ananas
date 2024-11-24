@@ -5,3 +5,8 @@ export const getTodayDate = () => {
   const year = today.getFullYear();
   return `${day}/${month}/${year}`;
 };
+
+export const getLocalHourFromTimestamp = (timestamp: number) => {
+  const date = new Date(timestamp * 1000);
+  return date.toLocaleTimeString();
+};

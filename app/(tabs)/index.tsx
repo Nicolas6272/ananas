@@ -1,9 +1,16 @@
-import { collection, onSnapshot } from "firebase/firestore";
+import {
+  collection,
+  onSnapshot,
+  orderBy,
+  query,
+  where,
+} from "firebase/firestore";
 import { useEffect, useState } from "react";
 import { ScrollView, View } from "react-native";
 
 import StylisedText from "~/components/atoms/styled/Text";
 import { db } from "~/db/firebaseConfig";
+import { getLocalHourFromTimestamp } from "~/helpers/date";
 import {
   type FirebaseMatch,
   type FirebaseTournamentWithMatches,
@@ -15,6 +22,9 @@ export default function HomePage() {
   const [tournaments, setTournaments] = useState<
     FirebaseTournamentWithMatches[]
   >([]);
+  const [selectedDate, setSelectedDate] = useState(new Date(2024, 9, 27));
+  const dateTimeStamp = selectedDate.getTime() / 1000;
+  console.log("🚀 ~ HomePage ~ dateTimeStamp:", dateTimeStamp);
 
   useEffect(() => {
     const fetchTournamentsAndMatches = () => {
@@ -27,21 +37,31 @@ export default function HomePage() {
             id: tournamentDoc.id,
           } as unknown as FirebaseTournamentWithMatches;
 
+          // Filtrer les matchs par date
           const matchesRef = collection(
             db,
             `tournaments/${tournamentDoc.id}/matches`,
           );
-          onSnapshot(matchesRef, (matchesSnapshot) => {
+          const matchesQuery = query(
+            matchesRef,
+            where("startTimestamp", ">=", dateTimeStamp),
+            where("startTimestamp", "<", dateTimeStamp + 86400),
+            orderBy("startTimestamp"),
+          );
+
+          onSnapshot(matchesQuery, (matchesSnapshot) => {
             const matches: FirebaseMatch[] = [];
             matchesSnapshot.forEach((matchDoc) => {
               matches.push(matchDoc.data() as FirebaseMatch);
             });
 
             // Ajouter les matchs au tournoi
-            tournamentsMap.set(tournamentDoc.id, {
-              ...tournamentData,
-              matches,
-            });
+            if (matches.length > 0) {
+              tournamentsMap.set(tournamentDoc.id, {
+                ...tournamentData,
+                matches,
+              });
+            }
 
             // Convertir la Map en tableau et mettre à jour le state
             setTournaments(Array.from(tournamentsMap.values()));
@@ -53,9 +73,7 @@ export default function HomePage() {
     };
 
     fetchTournamentsAndMatches();
-  }, []);
-
-  console.log(tournaments);
+  }, [selectedDate]);
 
   return (
     <ScrollView
@@ -102,6 +120,9 @@ export default function HomePage() {
                     <StylisedText>{match.period3B}</StylisedText>
                   </View>
                 </View>
+                <StylisedText>
+                  {getLocalHourFromTimestamp(match.startTimestamp)}
+                </StylisedText>
               </View>
             ))}
           </View>
