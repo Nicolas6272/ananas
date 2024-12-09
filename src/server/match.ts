@@ -2,22 +2,24 @@ import axios from "axios";
 import {
   addDoc,
   collection,
-  DocumentData,
+  type DocumentData,
   getDocs,
   query,
-  QuerySnapshot,
+  type QuerySnapshot,
   updateDoc,
   where,
 } from "firebase/firestore";
-import { ApiMatch, ApiMatchInfo, FirebaseMatch } from "~/types";
+
 import { getTodayDate } from "../helpers/date";
+
+import { type ApiMatch, type ApiMatchInfo, type FirebaseMatch } from "~/types";
 
 /// FETCH
 export const fetchTodayEvent = async () => {
   const todayDate = getTodayDate();
   const options = {
     method: "GET",
-    url: `https://allsportsapi2.p.rapidapi.com/api/tennis/category/3/events/${todayDate}`,
+    url: `https://allsportsapi2.p.rapidapi.com/api/tennis/category/785/events/${todayDate}`,
     headers: {
       "x-rapidapi-key": "0285a688b9mshffca91e7709c68fp193cfbjsn1a821f7fe710",
       "x-rapidapi-host": "allsportsapi2.p.rapidapi.com",

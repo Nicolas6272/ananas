@@ -1,4 +1,7 @@
-import { FirebaseMatch, FirebaseTournamentWithMatches } from "~/types";
+import {
+  type FirebaseMatch,
+  type FirebaseTournamentWithMatches,
+} from "~/types";
 
 export const getMatchesForDate: (
   tournament: FirebaseTournamentWithMatches,

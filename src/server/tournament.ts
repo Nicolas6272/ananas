@@ -1,6 +1,7 @@
 import axios from "axios";
 import { addDoc, collection, getDocs, query, where } from "firebase/firestore";
-import { ApiTournament, FirebaseTournament } from "~/types";
+
+import { type ApiTournament, type FirebaseTournament } from "~/types";
 
 /// FETCH ///
 
@@ -8,7 +9,7 @@ export const fetchLiveTennisTournamentsIds = async () => {
   console.log("\n🚀 ~ fetchLiveTennisTournamentsIds ~");
   const options = {
     method: "GET",
-    url: "https://allsportsapi2.p.rapidapi.com/api/tennis/tournament/all/category/3", ///FOR ATP TOURNAMENTS
+    url: "https://allsportsapi2.p.rapidapi.com/api/tennis/tournament/all/category/785", ///FOR ATP TOURNAMENTS
     headers: {
       "x-rapidapi-key": "0285a688b9mshffca91e7709c68fp193cfbjsn1a821f7fe710",
       "x-rapidapi-host": "allsportsapi2.p.rapidapi.com",

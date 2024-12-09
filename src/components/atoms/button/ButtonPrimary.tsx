@@ -1,10 +1,22 @@
 import { Button, ButtonText } from "@gluestack-ui/themed";
-import React from "react";
+import React, { type FC } from "react";
 
-export default function ButtonPrimary() {
+interface ButtonPrimaryProps {
+  children: React.ReactNode;
+  onClick?: () => void;
+  className?: string;
+}
+
+const ButtonPrimary: FC<ButtonPrimaryProps> = ({
+  children,
+  onClick,
+  className,
+}) => {
   return (
-    <Button>
-      <ButtonText className="text-white">Button</ButtonText>
+    <Button className={className} onPress={onClick}>
+      <ButtonText className="text-white">{children}</ButtonText>
     </Button>
   );
-}
+};
+
+export default ButtonPrimary;

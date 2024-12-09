@@ -6,11 +6,16 @@ import {
   where,
 } from "firebase/firestore";
 import React, { useEffect, useState } from "react";
-import { FlatList, ScrollView, TouchableOpacity, View } from "react-native";
+import { ScrollView, TouchableOpacity, View } from "react-native";
 
 import StylisedText from "~/components/atoms/styled/Text";
 import { db } from "~/db/firebaseConfig";
-import { getLocalHourFromTimestamp } from "~/helpers/date";
+import {
+  firstLetterToUpperCase,
+  getLocalHourFromTimestamp,
+  getWeekDayFirstThreeLetters,
+} from "~/helpers/date";
+import { cn } from "~/helpers/styles";
 import {
   type FirebaseMatch,
   type FirebaseTournamentWithMatches,
@@ -22,10 +27,16 @@ export default function HomePage() {
   const [tournaments, setTournaments] = useState<
     FirebaseTournamentWithMatches[]
   >([]);
-  const todayDate = new Date(2024, 9, 27);
+  const todayDate = new Date();
   const [selectedDate, setSelectedDate] = useState(todayDate);
 
   const dateTimeStamp = selectedDate.getTime() / 1000;
+  const yearToLocaleString = selectedDate.toLocaleDateString("fr-FR", {
+    year: "numeric",
+  });
+  const monthToLocaleString = selectedDate.toLocaleDateString("fr-FR", {
+    month: "long",
+  });
 
   useEffect(() => {
     const fetchTournamentsAndMatches = () => {
@@ -98,52 +109,39 @@ export default function HomePage() {
   return (
     <View className="flex min-h-full bg-background-950">
       <View className="flex rounded-b-[20px] bg-violet-500 px-6 pb-3">
-        <View className="flex flex-row items-center gap-2 py-3">
+        <View className="flex flex-row items-center gap-1 py-3">
           <StylisedText fontSize="$md" fontWeight="$semibold">
-            {selectedDate.toLocaleDateString("fr-FR", {
-              month: "long",
-            })}
+            {firstLetterToUpperCase(monthToLocaleString)}
           </StylisedText>
-          <StylisedText fontSize="$md">
-            {selectedDate.toLocaleDateString("fr-FR", {
-              year: "numeric",
-            })}
+          <StylisedText fontSize="$md" fontWeight="$semibold">
+            {yearToLocaleString}
           </StylisedText>
         </View>
-        <FlatList
-          horizontal
-          data={daysOfRange}
-          keyExtractor={(item) => item.toDateString()}
-          contentContainerStyle={{
-            display: "flex",
-            gap: 20,
-          }}
-          renderItem={({ item }) => {
-            const isSelected =
-              item.toDateString() === selectedDate.toDateString();
-            return (
-              <TouchableOpacity
-                onPress={() => setSelectedDate(item)}
-                style={{
-                  alignItems: "center",
-                  marginHorizontal: 2,
-                  paddingHorizontal: 4,
-                  paddingVertical: 2,
-                  borderRadius: 4,
-                  backgroundColor: isSelected ? "#272625" : "transparent",
-                }}
-              >
-                <StylisedText fontSize="$2xs" fontWeight="$thin">
-                  {item
-                    .toLocaleDateString("fr-FR", { weekday: "short" })
-                    .slice(0, 3)
-                    .toUpperCase()}
-                </StylisedText>
-                <StylisedText fontSize="$xs">{item.getDate()}</StylisedText>
-              </TouchableOpacity>
-            );
-          }}
-        />
+        <View className="flex flex-row justify-between">
+          {daysOfRange.map((day) => (
+            <TouchableOpacity
+              key={day.toDateString()}
+              onPress={() => setSelectedDate(day)}
+              className={cn(
+                "flex flex-col items-center justify-center px-1 py-0.5",
+                day.toDateString() === selectedDate.toDateString() &&
+                  "rounded-[4px] bg-background-900",
+              )}
+              style={{
+                gap: 2,
+              }}
+            >
+              <StylisedText fontSize="$sm" fontWeight="$thin">
+                {getWeekDayFirstThreeLetters(day)}
+              </StylisedText>
+              <StylisedText fontSize="$sm">
+                {day.toLocaleDateString("fr-FR", {
+                  day: "numeric",
+                })}
+              </StylisedText>
+            </TouchableOpacity>
+          ))}
+        </View>
       </View>
       <View className="bg-background-950 p-5">
         <ScrollView
@@ -178,21 +176,24 @@ export default function HomePage() {
                       <StylisedText>{match.playerAName}</StylisedText>
                       <StylisedText>{match.playerBName}</StylisedText>
                     </View>
-                    <View className="flex flex-col gap-1">
-                      <View className="flex flex-row gap-1">
-                        <StylisedText>{match.period1A}</StylisedText>
-                        <StylisedText>{match.period2A}</StylisedText>
-                        <StylisedText>{match.period3A}</StylisedText>
+                    {match.statusCode === 0 ? (
+                      <StylisedText>
+                        {getLocalHourFromTimestamp(match.startTimestamp)}
+                      </StylisedText>
+                    ) : (
+                      <View className="flex flex-col gap-1">
+                        <View className="flex flex-row gap-1">
+                          <StylisedText>{match.period1A}</StylisedText>
+                          <StylisedText>{match.period2A}</StylisedText>
+                          <StylisedText>{match.period3A}</StylisedText>
+                        </View>
+                        <View className="flex flex-row gap-1">
+                          <StylisedText>{match.period1B}</StylisedText>
+                          <StylisedText>{match.period2B}</StylisedText>
+                          <StylisedText>{match.period3B}</StylisedText>
+                        </View>
                       </View>
-                      <View className="flex flex-row gap-1">
-                        <StylisedText>{match.period1B}</StylisedText>
-                        <StylisedText>{match.period2B}</StylisedText>
-                        <StylisedText>{match.period3B}</StylisedText>
-                      </View>
-                    </View>
-                    <StylisedText>
-                      {getLocalHourFromTimestamp(match.startTimestamp)}
-                    </StylisedText>
+                    )}
                   </View>
                 ))}
               </View>
