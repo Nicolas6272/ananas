@@ -5,17 +5,44 @@
   "build": {
     "development": {
       "developmentClient": true,
-      "distribution": "internal"
+      "distribution": "internal",
+      "env": {
+        "EXPO_PUBLIC_FIREBASE_API_KEY": "AIzaSyCT_fu6UY7iY-RdkX15oFXHsxBPu0BSmyg",
+        "EXPO_PUBLIC_FIREBASE_AUTH_DOMAIN": "ananas-4f5c6.firebaseapp.com",
+        "EXPO_PUBLIC_FIREBASE_PROJECT_ID": "ananas-4f5c6",
+        "EXPO_PUBLIC_FIREBASE_STORAGE_BUCKET": "ananas-4f5c6.appspot.com",
+        "EXPO_PUBLIC_FIREBASE_MESSAGING_SENDER_ID": "274428610478",
+        "EXPO_PUBLIC_FIREBASE_APP_ID": "1:274428610478:web:b013f161d2267bd3dd6a3f",
+        "EXPO_PUBLIC_FIREBASE_MEASUREMENT_ID": "G-WJ87YEL6J9"
+      }
     },
     "preview": {
-      "distribution": "internal"
+      "distribution": "internal",
+      "env": {
+        "EXPO_PUBLIC_FIREBASE_API_KEY": "AIzaSyCT_fu6UY7iY-RdkX15oFXHsxBPu0BSmyg",
+        "EXPO_PUBLIC_FIREBASE_AUTH_DOMAIN": "ananas-4f5c6.firebaseapp.com",
+        "EXPO_PUBLIC_FIREBASE_PROJECT_ID": "ananas-4f5c6",
+        "EXPO_PUBLIC_FIREBASE_STORAGE_BUCKET": "ananas-4f5c6.appspot.com",
+        "EXPO_PUBLIC_FIREBASE_MESSAGING_SENDER_ID": "274428610478",
+        "EXPO_PUBLIC_FIREBASE_APP_ID": "1:274428610478:web:b013f161d2267bd3dd6a3f",
+        "EXPO_PUBLIC_FIREBASE_MEASUREMENT_ID": "G-WJ87YEL6J9"
+      }
     },
-   "production": {
+    "production": {
       "android": {
         "image": "latest"
       },
       "ios": {
         "image": "latest"
+      },
+      "env": {
+        "EXPO_PUBLIC_FIREBASE_API_KEY": "AIzaSyCT_fu6UY7iY-RdkX15oFXHsxBPu0BSmyg",
+        "EXPO_PUBLIC_FIREBASE_AUTH_DOMAIN": "ananas-4f5c6.firebaseapp.com",
+        "EXPO_PUBLIC_FIREBASE_PROJECT_ID": "ananas-4f5c6",
+        "EXPO_PUBLIC_FIREBASE_STORAGE_BUCKET": "ananas-4f5c6.appspot.com",
+        "EXPO_PUBLIC_FIREBASE_MESSAGING_SENDER_ID": "274428610478",
+        "EXPO_PUBLIC_FIREBASE_APP_ID": "1:274428610478:web:b013f161d2267bd3dd6a3f",
+        "EXPO_PUBLIC_FIREBASE_MEASUREMENT_ID": "G-WJ87YEL6J9"
       }
     }
   },
@@ -24,8 +51,8 @@
       "ios": {
         "appleId": "nicolas.jacquis@gmail.com",
         "ascAppId": "6738003725",
-        "appleTeamId": "F95XF4TLUS",
-      },
+        "appleTeamId": "F95XF4TLUS"
+      }
     }
   }
 }
