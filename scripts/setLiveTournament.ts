@@ -15,7 +15,6 @@ const setLiveTournament = async () => {
       "Tournament IDs fetched successfully with ids: ",
       tournamentIds,
     );
-    // const tournamentIds = [2519];
 
     // set live tournaments in the database
     for (const tournamentId of tournamentIds) {
