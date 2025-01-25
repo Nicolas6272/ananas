@@ -15,6 +15,7 @@ import {
   getLocalHourFromTimestamp,
   getWeekDayFirstThreeLetters,
 } from "~/helpers/date";
+import { getMatchRoundFormatted } from "~/helpers/match";
 import { cn } from "~/helpers/styles";
 import {
   type FirebaseMatch,
@@ -176,24 +177,32 @@ export default function HomePage() {
                       <StylisedText>{match.playerAName}</StylisedText>
                       <StylisedText>{match.playerBName}</StylisedText>
                     </View>
-                    {match.statusCode === 0 ? (
+                    <View className="flex flex-row items-center gap-x-[36px] border-blue-400">
+                      {match.statusCode === 0 ? (
+                        <StylisedText>
+                          {getLocalHourFromTimestamp(match.startTimestamp)}
+                        </StylisedText>
+                      ) : (
+                        <View className="flex flex-col gap-1">
+                          <View className="flex flex-row gap-x-2.5">
+                            <StylisedText>{match.period1A}</StylisedText>
+                            <StylisedText>{match.period2A}</StylisedText>
+                            <StylisedText>{match.period3A}</StylisedText>
+                          </View>
+                          <View className="flex flex-row gap-x-2.5">
+                            <StylisedText>{match.period1B}</StylisedText>
+                            <StylisedText>{match.period2B}</StylisedText>
+                            <StylisedText>{match.period3B}</StylisedText>
+                          </View>
+                        </View>
+                      )}
                       <StylisedText>
-                        {getLocalHourFromTimestamp(match.startTimestamp)}
+                        {getMatchRoundFormatted(
+                          match.roundInfo,
+                          tournament.numberOfTeams,
+                        )}
                       </StylisedText>
-                    ) : (
-                      <View className="flex flex-col gap-1">
-                        <View className="flex flex-row gap-1">
-                          <StylisedText>{match.period1A}</StylisedText>
-                          <StylisedText>{match.period2A}</StylisedText>
-                          <StylisedText>{match.period3A}</StylisedText>
-                        </View>
-                        <View className="flex flex-row gap-1">
-                          <StylisedText>{match.period1B}</StylisedText>
-                          <StylisedText>{match.period2B}</StylisedText>
-                          <StylisedText>{match.period3B}</StylisedText>
-                        </View>
-                      </View>
-                    )}
+                    </View>
                   </View>
                 ))}
               </View>

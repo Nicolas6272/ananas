@@ -8,7 +8,10 @@ export const getTodayDate = () => {
 
 export const getLocalHourFromTimestamp = (timestamp: number) => {
   const date = new Date(timestamp * 1000);
-  return date.toLocaleTimeString();
+  return date.toLocaleTimeString(undefined, {
+    hour: "2-digit",
+    minute: "2-digit",
+  });
 };
 
 export const getWeekDayFirstThreeLetters = (date: Date) => {

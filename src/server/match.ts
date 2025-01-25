@@ -56,6 +56,7 @@ export const fetchEventInfo = async (eventId: number) => {
 export const mapMatch = (event: ApiMatch): FirebaseMatch => {
   return {
     id: event.id,
+    roundInfo: event.roundInfo.cupRoundType,
     startTimestamp: event.startTimestamp,
     statusCode: event.status.code,
     playerAName: event.homeTeam.name,

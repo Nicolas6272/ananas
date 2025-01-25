@@ -49,7 +49,8 @@ export const mapTournament = (
   tournamentId: number,
   tournamentInfo: ApiTournament,
 ): FirebaseTournament => {
-  const { surfaceType, gender, uniqueTournament } = tournamentInfo;
+  const { surfaceType, gender, uniqueTournament, numberOfTeams } =
+    tournamentInfo;
   console.log("🚀 ~ tournamentInfo:", tournamentInfo);
   const { name, tennisPoints } = uniqueTournament;
 
@@ -75,6 +76,7 @@ export const mapTournament = (
     surface,
     level,
     playerSexe,
+    numberOfTeams,
   };
 };
 
