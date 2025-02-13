@@ -69,6 +69,7 @@ export const mapMatch = (event: ApiMatch): FirebaseMatch => {
     period2B: event.awayScore.period2 || 0,
     period3B: event.awayScore.period3 || 0,
     pointB: event.awayScore.point || "0",
+    winnerCode: event.winnerCode || 0,
   };
 };
 

@@ -1,3 +1,4 @@
+//Formatted match info
 export const getMatchRoundFormatted = (
   roundInfo: number,
   tournamentNumberOfTeams: number,
@@ -6,7 +7,7 @@ export const getMatchRoundFormatted = (
     case 1:
       return "Finale";
     case 2:
-      return "Demi finale";
+      return "DF";
     case 4:
       return "QF";
     case 8:
@@ -42,3 +43,18 @@ export const getMatchRoundFormatted = (
       return `1/${tournamentNumberOfTeams}`;
   }
 };
+
+/// Match status code
+export const isMatchStarted = (statusCode: number): boolean => statusCode !== 0;
+
+export const isMatchEnded = (statusCode: number): boolean =>
+  statusCode === 100 || statusCode === 92 || statusCode === 91;
+
+export const isMatchInProgress = (statusCode: number): boolean =>
+  isMatchStarted(statusCode) && !isMatchEnded(statusCode);
+
+export const isMatchCancelled = (statusCode: number): boolean =>
+  statusCode === 70;
+
+export const isMatchWinByForfeit = (statusCode: number): boolean =>
+  statusCode === 91;

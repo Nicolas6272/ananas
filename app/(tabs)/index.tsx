@@ -8,14 +8,14 @@ import {
 import React, { useEffect, useState } from "react";
 import { ScrollView, TouchableOpacity, View } from "react-native";
 
+import Match from "../../src/components/molecules/Match";
+
 import StylisedText from "~/components/atoms/styled/Text";
 import { db } from "~/db/firebaseConfig";
 import {
   firstLetterToUpperCase,
-  getLocalHourFromTimestamp,
   getWeekDayFirstThreeLetters,
 } from "~/helpers/date";
-import { getMatchRoundFormatted } from "~/helpers/match";
 import { cn } from "~/helpers/styles";
 import {
   type FirebaseMatch,
@@ -31,13 +31,14 @@ export default function HomePage() {
   const todayDate = new Date();
   const [selectedDate, setSelectedDate] = useState(todayDate);
 
-  const dateTimeStamp = selectedDate.getTime() / 1000;
-  const yearToLocaleString = selectedDate.toLocaleDateString("fr-FR", {
-    year: "numeric",
-  });
-  const monthToLocaleString = selectedDate.toLocaleDateString("fr-FR", {
-    month: "long",
-  });
+  // ✅ Calcul des timestamps exacts de minuit à 23h59
+  const startOfDay = new Date(selectedDate);
+  startOfDay.setHours(0, 0, 0, 0);
+  const startTimestamp = Math.floor(startOfDay.getTime() / 1000);
+
+  const endOfDay = new Date(selectedDate);
+  endOfDay.setHours(23, 59, 59, 999);
+  const endTimestamp = Math.floor(endOfDay.getTime() / 1000);
 
   useEffect(() => {
     const fetchTournamentsAndMatches = () => {
@@ -50,35 +51,38 @@ export default function HomePage() {
             id: tournamentDoc.id,
           } as unknown as FirebaseTournamentWithMatches;
 
-          // Filtrer les matchs par date
           const matchesRef = collection(
             db,
             `tournaments/${tournamentDoc.id}/matches`,
           );
           const matchesQuery = query(
             matchesRef,
-            where("startTimestamp", ">=", dateTimeStamp),
-            where("startTimestamp", "<", dateTimeStamp + 86400),
+            where("startTimestamp", ">=", startTimestamp),
+            where("startTimestamp", "<=", endTimestamp),
             orderBy("startTimestamp"),
           );
 
-          onSnapshot(matchesQuery, (matchesSnapshot) => {
-            const matches: FirebaseMatch[] = [];
-            matchesSnapshot.forEach((matchDoc) => {
-              matches.push(matchDoc.data() as FirebaseMatch);
-            });
+          // ✅ Un seul onSnapshot pour récupérer les matchs
+          const unsubscribeMatches = onSnapshot(
+            matchesQuery,
+            (matchesSnapshot) => {
+              const matches: FirebaseMatch[] = matchesSnapshot.docs.map(
+                (matchDoc) => matchDoc.data() as FirebaseMatch,
+              );
 
-            // Ajouter les matchs au tournoi
-            if (matches.length > 0) {
-              tournamentsMap.set(tournamentDoc.id, {
-                ...tournamentData,
-                matches,
-              });
-            }
+              if (matches.length > 0) {
+                tournamentsMap.set(tournamentDoc.id, {
+                  ...tournamentData,
+                  matches,
+                });
+              }
 
-            // Convertir la Map en tableau et mettre à jour le state
-            setTournaments(Array.from(tournamentsMap.values()));
-          });
+              // ✅ Mise à jour d'état unique pour éviter des re-rendus multiples
+              setTournaments(Array.from(tournamentsMap.values()));
+            },
+          );
+
+          return unsubscribeMatches;
         });
       });
 
@@ -88,6 +92,7 @@ export default function HomePage() {
     fetchTournamentsAndMatches();
   }, [selectedDate]);
 
+  // ✅ Génération des jours de la semaine
   const getDaysRange = () => {
     const days = [];
     const start = new Date(todayDate);
@@ -106,9 +111,15 @@ export default function HomePage() {
   };
 
   const daysOfRange = getDaysRange();
+  const yearToLocaleString = selectedDate.toLocaleDateString("fr-FR", {
+    year: "numeric",
+  });
+  const monthToLocaleString = selectedDate.toLocaleDateString("fr-FR", {
+    month: "long",
+  });
 
   return (
-    <View className="flex min-h-full bg-background-950">
+    <View className="flex min-h-full flex-col bg-background-950">
       <View className="flex rounded-b-[20px] bg-violet-500 px-6 pb-3">
         <View className="flex flex-row items-center gap-1 py-3">
           <StylisedText fontSize="$md" fontWeight="$semibold">
@@ -128,17 +139,13 @@ export default function HomePage() {
                 day.toDateString() === selectedDate.toDateString() &&
                   "rounded-[4px] bg-background-900",
               )}
-              style={{
-                gap: 2,
-              }}
+              style={{ gap: 2 }}
             >
               <StylisedText fontSize="$sm" fontWeight="$thin">
                 {getWeekDayFirstThreeLetters(day)}
               </StylisedText>
               <StylisedText fontSize="$sm">
-                {day.toLocaleDateString("fr-FR", {
-                  day: "numeric",
-                })}
+                {day.toLocaleDateString("fr-FR", { day: "numeric" })}
               </StylisedText>
             </TouchableOpacity>
           ))}
@@ -147,9 +154,11 @@ export default function HomePage() {
       <View className="bg-background-950 p-5">
         <ScrollView
           contentContainerStyle={{
+            display: "flex",
             alignItems: "center",
             justifyContent: "center",
-            gap: 20,
+            rowGap: 20,
+            height: "auto",
           }}
           className="flex w-full flex-col"
         >
@@ -158,7 +167,7 @@ export default function HomePage() {
               key={tournament.id}
               className="flex w-full overflow-hidden rounded-lg bg-background-900"
             >
-              <View className="flex flex-row items-center gap-3 bg-blue-500 px-2 py-3">
+              <View className="flex flex-row items-center gap-x-3 bg-blue-500 px-2 py-3">
                 <StylisedText fontSize="$sm" fontWeight="$semibold">
                   {tournament.name}
                 </StylisedText>
@@ -167,43 +176,13 @@ export default function HomePage() {
                 <StylisedText>Homme</StylisedText>
               </View>
 
-              <View className="flex flex-col gap-3 p-3">
+              <View className="flex flex-col p-3">
                 {tournament.matches.map((match) => (
-                  <View
+                  <Match
                     key={match.id}
-                    className="flex flex-row items-center justify-between"
-                  >
-                    <View className="flex flex-col gap-1">
-                      <StylisedText>{match.playerAName}</StylisedText>
-                      <StylisedText>{match.playerBName}</StylisedText>
-                    </View>
-                    <View className="flex flex-row items-center gap-x-[36px] border-blue-400">
-                      {match.statusCode === 0 ? (
-                        <StylisedText>
-                          {getLocalHourFromTimestamp(match.startTimestamp)}
-                        </StylisedText>
-                      ) : (
-                        <View className="flex flex-col gap-1">
-                          <View className="flex flex-row gap-x-2.5">
-                            <StylisedText>{match.period1A}</StylisedText>
-                            <StylisedText>{match.period2A}</StylisedText>
-                            <StylisedText>{match.period3A}</StylisedText>
-                          </View>
-                          <View className="flex flex-row gap-x-2.5">
-                            <StylisedText>{match.period1B}</StylisedText>
-                            <StylisedText>{match.period2B}</StylisedText>
-                            <StylisedText>{match.period3B}</StylisedText>
-                          </View>
-                        </View>
-                      )}
-                      <StylisedText>
-                        {getMatchRoundFormatted(
-                          match.roundInfo,
-                          tournament.numberOfTeams,
-                        )}
-                      </StylisedText>
-                    </View>
-                  </View>
+                    match={match}
+                    tounrnamentNbTeams={tournament.numberOfTeams}
+                  />
                 ))}
               </View>
             </View>
@@ -211,7 +190,7 @@ export default function HomePage() {
         </ScrollView>
         {!tournaments.length && (
           <StylisedText fontSize="$md">
-            Aucun match prévu pour le jour selectionné
+            Aucun match prévu pour le jour sélectionné
           </StylisedText>
         )}
       </View>

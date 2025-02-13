@@ -30,6 +30,7 @@ export type FirebaseMatch = {
   period2B?: number;
   period3B?: number;
   pointB?: string;
+  winnerCode?: number;
 };
 
 export type FirebaseTournamentWithMatches = FirebaseTournament & {
@@ -85,6 +86,7 @@ export type ApiMatch = {
     period3: number;
     point: string;
   };
+  winnerCode: number;
 };
 
 export type ApiMatchInfo = {
