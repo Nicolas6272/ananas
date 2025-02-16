@@ -50,10 +50,28 @@ const Match: FC<MatchProps> = ({ match, tounrnamentNbTeams }) => {
       ((matchDone && !AllScoreZero) || (matchInprogress && !AllScoreZero))
     );
   };
+  const setWinner = (AScore?: number, BScore?: number): number => {
+    if (AScore === undefined || BScore === undefined || AScore === BScore)
+      return 0;
+
+    // Vérifie si un joueur a gagné selon les règles du set
+    const hasWon = (winnerScore: number, loserScore: number) =>
+      (winnerScore >= 6 && winnerScore - loserScore >= 2) ||
+      (winnerScore === 7 && loserScore === 6);
+
+    if (hasWon(AScore, BScore)) return 1;
+    if (hasWon(BScore, AScore)) return 2;
+
+    return 0;
+  };
 
   const showFirstSetScore = showSetScore(period1A, period1B);
   const showSecondSetScore = showSetScore(period2A, period2B);
   const showThirdSetScore = showSetScore(period3A, period3B);
+
+  const firstSetWinner = setWinner(period1A, period1B);
+  const secondSetWinner = setWinner(period2A, period2B);
+  const thirdSetWinner = setWinner(period3A, period3B);
 
   const winnerA = winnerCode === 1;
   const winnerB = winnerCode === 2;
@@ -93,10 +111,20 @@ const Match: FC<MatchProps> = ({ match, tounrnamentNbTeams }) => {
             <View className="flex flex-row">
               {showFirstSetScore && (
                 <View className="flex flex-col">
-                  <StylisedText className="rounded-lg p-1">
+                  <StylisedText
+                    className={cn(
+                      "rounded-lg p-1",
+                      firstSetWinner === 2 && "opacity-50",
+                    )}
+                  >
                     {period1A}
                   </StylisedText>
-                  <StylisedText className="rounded-lg p-1">
+                  <StylisedText
+                    className={cn(
+                      "rounded-lg p-1",
+                      firstSetWinner === 1 && "opacity-50",
+                    )}
+                  >
                     {period1B}
                   </StylisedText>
                 </View>
@@ -104,20 +132,40 @@ const Match: FC<MatchProps> = ({ match, tounrnamentNbTeams }) => {
 
               {showSecondSetScore && (
                 <View className="flex flex-col">
-                  <StylisedText className="rounded-lg p-1">
+                  <StylisedText
+                    className={cn(
+                      "rounded-lg p-1",
+                      secondSetWinner === 2 && "opacity-50",
+                    )}
+                  >
                     {period2A}
                   </StylisedText>
-                  <StylisedText className="rounded-lg p-1">
+                  <StylisedText
+                    className={cn(
+                      "rounded-lg p-1",
+                      secondSetWinner === 1 && "opacity-50",
+                    )}
+                  >
                     {period2B}
                   </StylisedText>
                 </View>
               )}
               {showThirdSetScore && (
                 <View className="flex flex-col">
-                  <StylisedText className="rounded-lg p-1">
+                  <StylisedText
+                    className={cn(
+                      "rounded-lg p-1",
+                      thirdSetWinner === 2 && "opacity-50",
+                    )}
+                  >
                     {period3A}
                   </StylisedText>
-                  <StylisedText className="rounded-lg p-1">
+                  <StylisedText
+                    className={cn(
+                      "rounded-lg p-1",
+                      thirdSetWinner === 1 && "opacity-50",
+                    )}
+                  >
                     {period3B}
                   </StylisedText>
                 </View>
