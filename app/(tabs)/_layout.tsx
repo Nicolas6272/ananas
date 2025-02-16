@@ -6,7 +6,7 @@ import Header from "~/components/organisms/Header";
 export default () => {
   return (
     <Tabs
-      screenOptions={({ route }) => ({
+      screenOptions={() => ({
         tabBarActiveTintColor: "#FFFFFF",
         tabBarInactiveTintColor: "#747474",
         tabBarShowLabel: false,
@@ -14,6 +14,8 @@ export default () => {
           backgroundColor: "#272625",
           borderTopColor: "#535252",
           borderTopWidth: 1,
+          height: 80,
+          paddingTop: 10,
         },
         header: ({ options }) => <Header title={options.title} />,
       })}

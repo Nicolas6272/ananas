@@ -6,7 +6,7 @@ import {
   where,
 } from "firebase/firestore";
 import React, { useEffect, useState } from "react";
-import { ScrollView, TouchableOpacity, View } from "react-native";
+import { SafeAreaView, ScrollView, TouchableOpacity, View } from "react-native";
 
 import Match from "../../src/components/molecules/Match";
 
@@ -151,49 +151,49 @@ export default function HomePage() {
           ))}
         </View>
       </View>
-      <View className="bg-background-950 p-5">
-        <ScrollView
-          contentContainerStyle={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            rowGap: 20,
-            height: "auto",
-          }}
-          className="flex w-full flex-col"
-        >
-          {tournaments.map((tournament) => (
-            <View
-              key={tournament.id}
-              className="flex w-full overflow-hidden rounded-lg bg-background-900"
-            >
-              <View className="flex flex-row items-center gap-x-3 bg-blue-500 px-2 py-3">
-                <StylisedText fontSize="$sm" fontWeight="$semibold">
-                  {tournament.name}
-                </StylisedText>
-                <StylisedText>{tournament.level}</StylisedText>
-                <View className="h-[80%] w-[1px] bg-white" />
-                <StylisedText>Homme</StylisedText>
-              </View>
+      <SafeAreaView style={{ flex: 1 }}>
+        <View className="flex-1 bg-background-950 p-5">
+          <ScrollView
+            showsVerticalScrollIndicator={false}
+            contentContainerStyle={{
+              rowGap: 20,
+              paddingBottom: 100,
+            }}
+            className="flex w-full flex-col"
+          >
+            {tournaments.map((tournament) => (
+              <View
+                key={tournament.id}
+                className="flex w-full overflow-hidden rounded-lg bg-background-900"
+              >
+                <View className="flex flex-row items-center gap-x-3 bg-blue-500 px-2 py-3">
+                  <StylisedText fontSize="$sm" fontWeight="$semibold">
+                    {tournament.name}
+                  </StylisedText>
+                  <StylisedText>{tournament.level}</StylisedText>
+                  <View className="h-[80%] w-[1px] bg-white" />
+                  <StylisedText>Homme</StylisedText>
+                </View>
 
-              <View className="flex flex-col p-3">
-                {tournament.matches.map((match) => (
-                  <Match
-                    key={match.id}
-                    match={match}
-                    tounrnamentNbTeams={tournament.numberOfTeams}
-                  />
-                ))}
+                <View className="flex flex-col p-3">
+                  {tournament.matches.map((match) => (
+                    <Match
+                      key={match.id}
+                      match={match}
+                      tounrnamentNbTeams={tournament.numberOfTeams}
+                    />
+                  ))}
+                </View>
               </View>
-            </View>
-          ))}
-        </ScrollView>
-        {!tournaments.length && (
-          <StylisedText fontSize="$md">
-            Aucun match prévu pour le jour sélectionné
-          </StylisedText>
-        )}
-      </View>
+            ))}
+          </ScrollView>
+          {!tournaments.length && (
+            <StylisedText fontSize="$md">
+              Aucun match prévu pour le jour sélectionné
+            </StylisedText>
+          )}
+        </View>
+      </SafeAreaView>
     </View>
   );
 }
