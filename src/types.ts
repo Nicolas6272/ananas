@@ -11,10 +11,12 @@ export type FirebaseTournament = {
   surface: string;
   level: string;
   playerSexe: string;
+  numberOfTeams: number;
 };
 
 export type FirebaseMatch = {
   id: number;
+  roundInfo: number;
   stadium?: string;
   startTimestamp: number;
   statusCode: number;
@@ -28,6 +30,7 @@ export type FirebaseMatch = {
   period2B?: number;
   period3B?: number;
   pointB?: string;
+  winnerCode?: number;
 };
 
 export type FirebaseTournamentWithMatches = FirebaseTournament & {
@@ -39,6 +42,7 @@ export type FirebaseTournamentWithMatches = FirebaseTournament & {
 export type ApiTournament = {
   surfaceType: string;
   gender: string;
+  numberOfTeams: number;
   uniqueTournament: {
     name: string;
     surface: string;
@@ -53,6 +57,9 @@ export type ApiMatch = {
     uniqueTournament: {
       id: number;
     };
+  };
+  roundInfo: {
+    cupRoundType: number;
   };
   id: number;
   startTimestamp: number;
@@ -79,6 +86,7 @@ export type ApiMatch = {
     period3: number;
     point: string;
   };
+  winnerCode: number;
 };
 
 export type ApiMatchInfo = {

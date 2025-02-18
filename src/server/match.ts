@@ -56,6 +56,7 @@ export const fetchEventInfo = async (eventId: number) => {
 export const mapMatch = (event: ApiMatch): FirebaseMatch => {
   return {
     id: event.id,
+    roundInfo: event.roundInfo.cupRoundType,
     startTimestamp: event.startTimestamp,
     statusCode: event.status.code,
     playerAName: event.homeTeam.name,
@@ -68,6 +69,7 @@ export const mapMatch = (event: ApiMatch): FirebaseMatch => {
     period2B: event.awayScore.period2 || 0,
     period3B: event.awayScore.period3 || 0,
     pointB: event.awayScore.point || "0",
+    winnerCode: event.winnerCode || 0,
   };
 };
 
