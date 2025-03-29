@@ -20,7 +20,13 @@
       "config": {
         "usesNonExemptEncryption": false
       },
-      "bundleIdentifier": "com.nicolas6272.sollow"
+      "bundleIdentifier": "com.nicolas6272.sollow",
+      "appleTeamId": "F95XF4TLUS",
+      "entitlements": {
+        "com.apple.security.application-groups": [
+          "group.com.galaxies.sollow"
+        ]
+      },
     },
     "android": {
       "adaptiveIcon": {
@@ -35,7 +41,8 @@
     },
     "plugins": [
       "expo-router",
-      "expo-secure-store"
+      "expo-secure-store",
+      "@bacons/apple-targets"
     ],
     "scheme": "sollow",
     "extra": {

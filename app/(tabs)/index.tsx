@@ -1,3 +1,4 @@
+import { ExtensionStorage } from "@bacons/apple-targets";
 import {
   collection,
   onSnapshot,
@@ -21,6 +22,8 @@ import {
   type FirebaseMatch,
   type FirebaseTournamentWithMatches,
 } from "~/types";
+
+const widgetStorage = new ExtensionStorage("group.com.galaxies.sollow");
 
 export default function HomePage() {
   const tournamentsRef = collection(db, "tournaments");
@@ -91,6 +94,13 @@ export default function HomePage() {
 
     fetchTournamentsAndMatches();
   }, [selectedDate]);
+
+  useEffect(() => {
+    const score = tournaments[0]?.matches[0]?.period1A;
+    console.log("🚀 ~ useEffect ~ score:", score);
+    widgetStorage.set("name", score);
+    ExtensionStorage.reloadWidget();
+  }, [tournaments]);
 
   // ✅ Génération des jours de la semaine
   const getDaysRange = () => {
