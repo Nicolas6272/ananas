@@ -11,6 +11,7 @@
     "test:tsc": "echo \"\\033[33mRunning typescript check\" && tsc"
   },
   "dependencies": {
+    "@bacons/apple-targets": "^0.2.1",
     "@expo/metro-config": "~0.19.0",
     "@gluestack-style/react": "^1.0.57",
     "@gluestack-ui/config": "^1.1.19",
