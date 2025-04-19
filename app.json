@@ -26,7 +26,7 @@
         "com.apple.security.application-groups": [
           "group.com.galaxies.sollow"
         ]
-      },
+      }
     },
     "android": {
       "adaptiveIcon": {
@@ -42,7 +42,8 @@
     "plugins": [
       "expo-router",
       "expo-secure-store",
-      "@bacons/apple-targets"
+      "@bacons/apple-targets",
+      "expo-background-task"
     ],
     "scheme": "sollow",
     "extra": {
