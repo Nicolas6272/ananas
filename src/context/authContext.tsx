@@ -8,9 +8,10 @@ import {
   signOut,
 } from "firebase/auth";
 import { doc, getDoc, setDoc } from "firebase/firestore";
-import { FC, createContext, useContext, useEffect, useState } from "react";
+import { type FC, createContext, useContext, useEffect, useState } from "react";
+
 import { app, db } from "~/db/firebaseConfig";
-import { User } from "~/types";
+import { type User } from "~/types";
 
 export const auth = initializeAuth(app, {
   persistence: getReactNativePersistence(AsyncStorage),
@@ -47,7 +48,7 @@ export const AuthContextProvider: FC<AuthContextProviderProps> = ({
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   useEffect(() => {
-    const unsub = onAuthStateChanged(auth, user => {
+    const unsub = onAuthStateChanged(auth, (user) => {
       if (user) {
         setIsAuthenticated(true);
         // setUser(user);
@@ -124,7 +125,8 @@ export const AuthContextProvider: FC<AuthContextProviderProps> = ({
         login,
         logout,
         register,
-      }}>
+      }}
+    >
       {children}
     </AuthContext.Provider>
   );

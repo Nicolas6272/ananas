@@ -97,7 +97,6 @@ export default function HomePage() {
 
   useEffect(() => {
     const score = tournaments[0]?.matches[0]?.period1A;
-    console.log("🚀 ~ useEffect ~ score:", score);
     widgetStorage.set("name", score);
     ExtensionStorage.reloadWidget();
   }, [tournaments]);
