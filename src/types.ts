@@ -1,8 +1,8 @@
 /// FIREBASE TYPES
 
 export type User = {
-  userId: string;
-  username: string;
+  fcmToken: string;
+  favoritePlayers: string[];
 };
 
 export type FirebaseTournament = {

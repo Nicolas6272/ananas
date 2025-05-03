@@ -4,7 +4,6 @@ import { addDoc, collection, getDocs, query, where } from "firebase/firestore";
 import { type ApiTournament, type FirebaseTournament } from "~/types";
 
 /// FETCH ///
-
 export const fetchLiveTennisTournamentsIds = async () => {
   console.log("\n🚀 ~ fetchLiveTennisTournamentsIds ~");
   const options = {
